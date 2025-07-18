@@ -1,12 +1,14 @@
 #pragma once
 
 #include "byte_stream.hh"
+#include <unordered_map>
+#include <map>
 
 class Reassembler
 {
 public:
   // Construct Reassembler to write into given ByteStream.
-  explicit Reassembler( ByteStream&& output ) : output_( std::move( output ) ) {}
+  explicit Reassembler( ByteStream&& output ) : output_( std::move( output ) ),capacity_(writer().available_capacity()) {}
 
   /*
    * Insert a new substring to be reassembled into a ByteStream.
@@ -43,4 +45,16 @@ public:
 
 private:
   ByteStream output_;
+  uint64_t capacity_;                                                 // Capacity of the output stream
+  uint64_t last_index_ = -1;                                          // Last index written to the output stream
+  std::multimap<uint64_t, std::string> pending_substrings_{}; // Maps first index to data
+
+  Writer& output_writer() { return output_.writer(); }
+  uint64_t next_pushed_index() const { return writer().bytes_pushed(); }
+  uint64_t available_capacity() const
+  {
+    return writer().available_capacity();
+  }; // How many bytes can be buffered in the Reassembler/ByteStream?
+
+  void merge();
 };
