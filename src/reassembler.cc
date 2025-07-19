@@ -8,7 +8,7 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
   debug( "unimplemented insert({}, {}, {}) called", first_index, data, is_last_substring );
 
   // If the stream is closed, do nothing
-  if ( data.empty() && is_last_substring && first_index == next_pushed_index() ) {
+  if ( data.empty() && is_last_substring  ) {
     output_writer().close();
     return;
   }
