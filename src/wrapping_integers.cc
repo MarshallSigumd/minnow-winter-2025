@@ -23,7 +23,7 @@ uint64_t Wrap32::unwrap( Wrap32 zero_point, uint64_t checkpoint ) const
   static constexpr uint64_t int32 = 1uL << 32;
 
   auto const ckp32 = wrap( checkpoint, zero_point );
-  auto const diff = ckp32.raw_value_ - zero_point.raw_value_;
+  auto const diff = raw_value_ - ckp32.raw_value_;
 
   if ( diff <= int31 || checkpoint + diff < int32 )
     return checkpoint + diff;
