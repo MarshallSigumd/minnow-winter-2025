@@ -27,4 +27,6 @@ public:
 
 private:
   Reassembler reassembler_;
+  bool FIN = false;
+  Wrap32 zero_point_ { 0 }; // The zero point for the sequence numbers
 };

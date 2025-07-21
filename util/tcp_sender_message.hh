@@ -26,11 +26,15 @@ struct TCPSenderMessage
 {
   Wrap32 seqno { 0 };
 
-  bool SYN {};
-  std::string payload {};
-  bool FIN {};
+  bool SYN {};// If set, this segment is the beginning of the byte stream (SYN segment)
+  // If SYN is set, seqno is the Initial Sequence Number (ISN) -- the zero point.
+  // If SYN is not set, seqno is the sequence number of the beginning of the payload.
 
-  bool RST {};
+  std::string payload {};// The payload is a substring (possibly empty) of the byte stream.
+
+  bool FIN {};// If set, the payload represents the ending of the byte stream.
+
+  bool RST {};// If set, the stream has suffered an error and the connection should be aborted.
 
   // How many sequence numbers does this segment use?
   size_t sequence_length() const { return SYN + payload.size() + FIN; }

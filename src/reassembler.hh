@@ -6,6 +6,8 @@
 
 class Reassembler
 {
+  friend class TCPReceiver;// Allow TCPReceiver to access private members
+
 public:
   // Construct Reassembler to write into given ByteStream.
   explicit Reassembler( ByteStream&& output ) : output_( std::move( output ) ),capacity_(writer().available_capacity()) {}
@@ -46,8 +48,10 @@ public:
 private:
   ByteStream output_;
   uint64_t capacity_;                                                 // Capacity of the output stream
-  uint64_t last_index_ = -1;                                          // Last index written to the output stream
+  uint64_t last_index_ = UINT64_MAX;                                  // Last index written to the output stream
   std::multimap<uint64_t, std::string> pending_substrings_{}; // Maps first index to data
+  bool SYN=false; // Whether the first segment was received
+  bool FIN=false; // Whether the last segment was received
 
   Writer& output_writer() { return output_.writer(); }
   uint64_t next_pushed_index() const { return writer().bytes_pushed(); }
