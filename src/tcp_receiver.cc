@@ -10,8 +10,7 @@ void TCPReceiver::receive( TCPSenderMessage message )
   // (void)message;
 
   if ( message.RST ) {
-    reassembler_.output_writer().close();
-    return;
+    reassembler_.output_.set_error();
   }
 
   if ( message.FIN ) {
