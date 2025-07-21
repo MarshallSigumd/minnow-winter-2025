@@ -9,7 +9,7 @@ Wrap32 Wrap32::wrap( uint64_t n, Wrap32 zero_point )
   // debug( "unimplemented wrap( {}, {} ) called", n, zero_point.raw_value_ );
   // return Wrap32 { 0 };
 
-  return zero_point + n;
+  return Wrap32( static_cast<uint32_t>( ( zero_point.raw_value_ + n ) % ( (uint64_t)UINT32_MAX + 1 ) ) );
   // n implicitly convert to uint32_t in order to match the signature of operator+
 }
 

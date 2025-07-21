@@ -13,15 +13,15 @@ void TCPReceiver::receive( TCPSenderMessage message )
     reassembler_.output_.set_error();
   }
 
-  if ( message.FIN ) {
-    FIN = true;
-  }
-
   if ( message.SYN ) {
     zero_point_ = message.seqno;
     reassembler_.SYN = true;
-    reassembler_.FIN = message.FIN;
-    FIN = message.FIN;
+    reassembler_.FIN = false;
+    FIN = false;
+  }
+
+  if ( message.FIN ) {
+    FIN = true;
   }
 
   uint64_t first_index = message.seqno.unwrap( zero_point_, reassembler_.next_pushed_index() ) + message.SYN;
