@@ -13,7 +13,9 @@ void TCPReceiver::receive( TCPSenderMessage message )
     reassembler_.output_.set_error();
   }
 
-  if ( message.SYN ) {
+  if ( message.SYN )
+  // message是SYN包
+  {
     zero_point_ = message.seqno;
     reassembler_.SYN = true;
     reassembler_.FIN = false;
@@ -27,9 +29,8 @@ void TCPReceiver::receive( TCPSenderMessage message )
   uint64_t first_index = message.seqno.unwrap( zero_point_, reassembler_.next_pushed_index() ) + message.SYN;
   reassembler_.insert( first_index, message.payload, message.FIN );
 
-  if(FIN&&reassembler_.writer().is_closed())
-  {
-    reassembler_.FIN= true;
+  if ( FIN && reassembler_.writer().is_closed() ) {
+    reassembler_.FIN = true;
   }
 
   // debug( "receive() called with seqno: {}, first_index: {}, payload size: {}, FIN: {}",
@@ -42,14 +43,12 @@ TCPReceiverMessage TCPReceiver::send() const
   // debug( "unimplemented send() called" );
   // return {};
 
-  TCPReceiverMessage msg;// Create a TCPReceiverMessage to send
-  if(reassembler_.output_.has_error())
-  {
+  TCPReceiverMessage msg; // Create a TCPReceiverMessage to send
+  if ( reassembler_.output_.has_error() ) {
     msg.RST = true;
   }
 
-  if(reassembler_.SYN)
-  {
+  if ( reassembler_.SYN ) {
     uint64_t ackno = reassembler_.next_pushed_index();
     msg.ackno = Wrap32::wrap( ackno, zero_point_ );
   }

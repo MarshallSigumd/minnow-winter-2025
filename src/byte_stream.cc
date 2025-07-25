@@ -59,7 +59,7 @@ bool Reader::is_finished() const
 
 uint64_t Reader::bytes_buffered() const
 {
-  return buffer_.size() - read_index_;
+  return buffer_.size() - read_index_;  // Number of bytes currently buffered (pushed and not popped)
 }
 
 uint64_t Reader::bytes_popped() const

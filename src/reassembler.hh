@@ -34,7 +34,7 @@ public:
    *
    * The Reassembler should close the stream after writing the last byte.
    */
-  void insert( uint64_t first_index, std::string data, bool is_last_substring );
+  void insert( uint64_t first_index, std::string data, bool is_last_substring );//first index是传进来的substring的起始位置，data是传进来的数据，is_last_substring表示是否是最后一个子串
 
   // How many bytes are stored in the Reassembler itself?
   // This function is for testing only; don't add extra state to support it.
